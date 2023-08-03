@@ -1,4 +1,4 @@
-# Node-Stripe-Test1
+# Node-Stripe-Test
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -13,15 +13,15 @@ A package for Stripe integration.
 
 ## Installation
 To use this package, you need [Node.js](https://nodejs.org/) installed on your machine.
-npm install node-stripe-test1
+npm install node-stripe-test
 
 
 ## Usage
 To integrate with Stripe, follow these steps:
 
 Install the package using npm:
-npm install node-stripe-test1
-const stripe = require('node-stripe-test1');
+npm install node-stripe-test
+const stripe = require('node-stripe-test');
 
 
 ## License
