@@ -9,7 +9,6 @@ A package for Stripe integration.
 - [Usage](#usage)
 - [License](#license)
 - [Contributing](#contributing)
-- [Issues](#issues)
 
 ## Installation
 To use this package, you need [Node.js](https://nodejs.org/) installed on your machine.
