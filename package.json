@@ -1,0 +1,38 @@
+{
+  "name": "node-stripe-test",
+  "version": "1.0.2",
+  "description": "A package for Stripe integration.",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MayurSit2023/node-stripe-test.git"
+  },
+  "keywords": [
+    "stripe",
+    "integration"
+  ],
+  "author": "Mayur Chaudhary",
+  "license": "MIT",
+  "dependencies": {
+    "@types/stripe": "^8.0.417",
+    "stripe": "^12.16.0",
+    "typescript": "^5.1.6"
+  },
+  "devDependencies": {
+    "typescript": "^5.1.6"
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "homepage": "https://github.com/MayurSit2023/node-stripe-test#readme",
+  "bugs": {
+    "url": "https://github.com/MayurSit2023/node-stripe-test/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
