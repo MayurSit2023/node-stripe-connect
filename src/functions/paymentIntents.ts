@@ -1,5 +1,5 @@
 import { getStripeInstance } from '../config/stripeConfig';
-import { PaymentIntentError, PaymentIntentIDInput, PaymentIntentInput, PaymentIntentResult } from '../interfaces/paymentIntents.interface';
+import { PaymentIntentError, PaymentIntentIDInput, PaymentIntentInput, PaymentIntentResult, RetrievePaymentIntent, SetupPaymentIntent } from '../interfaces/paymentIntents.interface';
 
 // Function to create a new Payment Intent on Stripe
 export async function createPaymentIntent({ amount, currency, paymentMethod }: PaymentIntentInput): Promise<PaymentIntentResult | PaymentIntentError> {
@@ -119,5 +119,55 @@ export async function cancelPaymentIntent({ paymentIntentId }: PaymentIntentIDIn
     } catch (error) {
         // If there is an error during the cancellation, return an error message
         return { error: 'Failed to cancel Payment Intent.' + error };
+    }
+}
+
+// Function to setup a new Payment Intent on Stripe
+export async function setupPaymentIntent({ usage, customerId }: SetupPaymentIntent): Promise<PaymentIntentResult | PaymentIntentError> {
+    // Validate input data
+    type Usage = 'off_session' | 'on_session';
+    if (!customerId || !usage) {
+        return { error: 'Invalid input data. customerId and usage are required fields.' };
+    }
+
+    const validUsages: Usage[] = ['off_session', 'on_session'];
+    if (!validUsages.includes(usage as Usage)) {
+        return { error: 'Invalid usage. Usage must be either "off_session" or "on_session".' };
+    }
+
+    const stripeInstance = getStripeInstance();
+
+    try {
+        // Create the Payment Intent using the Stripe API
+        const setupIntent = await stripeInstance.setupIntents.create({
+            customer: customerId,
+            usage: usage as Usage
+        });
+
+        // Return the Payment Intent information along with a success message
+        return { message: 'Payment Intent created successfully.', setupIntent: setupIntent };
+    } catch (error) {
+        // If there is an error during the creation, return an error message
+        return { error: 'Failed to create Payment Intent: ' + error };
+    }
+}
+
+// Function to retrieve a Payment Intent from Stripe
+export async function retrieveSetupPaymentIntent({ SetupInentId }: RetrievePaymentIntent): Promise<PaymentIntentResult | PaymentIntentError> {
+    // Validate input data
+    if (!SetupInentId) {
+        return { error: 'SetupIntentId is required.' };
+    }
+
+    const stripeInstance = getStripeInstance();
+    try {
+        // Retrieve the Payment Intent using the Stripe API
+        const setupIntent = await stripeInstance.setupIntents.retrieve(SetupInentId);
+
+        // Return the Payment Intent information along with a success message
+        return { message: 'Payment Intent retrieved successfully.', setupIntent: setupIntent };
+    } catch (error) {
+        // If there is an error during the retrieval, return an error message
+        return { error: 'Failed to retrieve Payment Intent: ' + error };
     }
 }

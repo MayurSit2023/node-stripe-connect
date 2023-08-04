@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.cancelPaymentIntent = exports.capturePaymentIntent = exports.confirmPaymentIntent = exports.retrievePaymentIntent = exports.createPaymentIntent = void 0;
+exports.retrieveSetupPaymentIntent = exports.setupPaymentIntent = exports.cancelPaymentIntent = exports.capturePaymentIntent = exports.confirmPaymentIntent = exports.retrievePaymentIntent = exports.createPaymentIntent = void 0;
 const stripeConfig_1 = require("../config/stripeConfig");
 // Function to create a new Payment Intent on Stripe
 function createPaymentIntent({ amount, currency, paymentMethod }) {
@@ -135,3 +135,51 @@ function cancelPaymentIntent({ paymentIntentId }) {
     });
 }
 exports.cancelPaymentIntent = cancelPaymentIntent;
+// Function to setup a new Payment Intent on Stripe
+function setupPaymentIntent({ usage, customerId }) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (!customerId || !usage) {
+            return { error: 'Invalid input data. customerId and usage are required fields.' };
+        }
+        const validUsages = ['off_session', 'on_session'];
+        if (!validUsages.includes(usage)) {
+            return { error: 'Invalid usage. Usage must be either "off_session" or "on_session".' };
+        }
+        const stripeInstance = (0, stripeConfig_1.getStripeInstance)();
+        try {
+            // Create the Payment Intent using the Stripe API
+            const setupIntent = yield stripeInstance.setupIntents.create({
+                customer: customerId,
+                usage: usage
+            });
+            // Return the Payment Intent information along with a success message
+            return { message: 'Payment Intent created successfully.', setupIntent: setupIntent };
+        }
+        catch (error) {
+            // If there is an error during the creation, return an error message
+            return { error: 'Failed to create Payment Intent: ' + error };
+        }
+    });
+}
+exports.setupPaymentIntent = setupPaymentIntent;
+// Function to retrieve a Payment Intent from Stripe
+function retrieveSetupPaymentIntent({ SetupInentId }) {
+    return __awaiter(this, void 0, void 0, function* () {
+        // Validate input data
+        if (!SetupInentId) {
+            return { error: 'SetupIntentId is required.' };
+        }
+        const stripeInstance = (0, stripeConfig_1.getStripeInstance)();
+        try {
+            // Retrieve the Payment Intent using the Stripe API
+            const setupIntent = yield stripeInstance.setupIntents.retrieve(SetupInentId);
+            // Return the Payment Intent information along with a success message
+            return { message: 'Payment Intent retrieved successfully.', setupIntent: setupIntent };
+        }
+        catch (error) {
+            // If there is an error during the retrieval, return an error message
+            return { error: 'Failed to retrieve Payment Intent: ' + error };
+        }
+    });
+}
+exports.retrieveSetupPaymentIntent = retrieveSetupPaymentIntent;

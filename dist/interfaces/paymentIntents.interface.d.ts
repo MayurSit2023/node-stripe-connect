@@ -12,6 +12,7 @@ export interface PaymentIntentResult {
     message: string;
     clientSecret?: string | null;
     paymentIntent?: Stripe.PaymentIntent;
+    setupIntent?: Stripe.SetupIntent;
 }
 export interface PaymentIntentError {
     error: string;
@@ -23,4 +24,11 @@ export interface PaymentMethod {
     cardLast4?: string;
     bankName?: string;
     bankLast4?: string;
+}
+export interface SetupPaymentIntent {
+    usage: string;
+    customerId: string;
+}
+export interface RetrievePaymentIntent {
+    SetupInentId: string;
 }
