@@ -1,36 +1,52 @@
 import { getStripeInstance } from '../config/stripeConfig';
-import { PaymentIntentError, PaymentIntentIDInput, PaymentIntentInput, PaymentIntentResult, RetrievePaymentIntent, SetupPaymentIntent } from '../interfaces/paymentIntents.interface';
+import { PaymentIntentError, PaymentIntentIDInput, PaymentIntentResult, RetrievePaymentIntent, SetupPaymentIntent, CreatePaymentIntentRequest } from '../interfaces/paymentIntents.interface';
+import Stripe from 'stripe';
 
 // Function to create a new Payment Intent on Stripe
-export async function createPaymentIntent({ amount, currency, paymentMethod }: PaymentIntentInput): Promise<PaymentIntentResult | PaymentIntentError> {
-    // Validate input data
-    if (!amount || amount <= 0) {
-        return { error: 'Invalid amount. The amount must be greater than 0.' };
+export async function createPaymentIntent(param: CreatePaymentIntentRequest): Promise<PaymentIntentResult | PaymentIntentError> {
+    const { currency, paymentMethodType, paymentMethodOptions, customerId } = param;
+
+    const params: Stripe.PaymentIntentCreateParams = {
+        amount: 5999,
+        currency,
+        payment_method_types: paymentMethodType === 'link' ? ['link', 'card'] : [paymentMethodType],
+    };
+
+    if (paymentMethodType === 'acss_debit') {
+        params.payment_method_options = {
+            acss_debit: {
+                mandate_options: {
+                    payment_schedule: 'sporadic',
+                    transaction_type: 'personal',
+                },
+            },
+        };
+    } else if (paymentMethodType === 'customer_balance') {
+        params.payment_method_data = {
+            type: 'customer_balance',
+        };
+        params.confirm = true;
+
+        if (!customerId) {
+            return { error: 'customerId is required for paymentMethodType "customer_balance"' }
+        }
+
+        params.customer = customerId;
     }
 
-    if (!currency) {
-        return { error: 'Please provide a valid currency code.' };
+    if (paymentMethodOptions) {
+        params.payment_method_options = paymentMethodOptions;
     }
-    if (!paymentMethod?.id || typeof paymentMethod.id !== 'string') {
-        return { error: 'Invalid payment method ID.' };
-    }
+
     const stripeInstance = getStripeInstance();
 
     try {
-        // Create the Payment Intent using the Stripe API
-        const paymentIntent = await stripeInstance.paymentIntents.create({
-            amount: amount,
-            currency: currency,
-            // payment_method: paymentMethod.id,          
-            // automatic_payment_methods: { enabled: true },
-            payment_method: "pm_card_visa",
-            // return_url: 'https://yourwebsite.com/thank-you', // Replace this with your actual return URL
-            confirm: true,
-            capture_method: 'automatic_async',
-
-        });
+        const paymentIntent = await stripeInstance.paymentIntents.create(params);
         // Return the Payment Intent information along with a success message
-        return { message: 'Payment Intent created successfully.', clientSecret: paymentIntent.client_secret };
+        if (paymentIntent.status == "requires_payment_method") {
+            return { message: 'Payment Intent required payment method .', paymentIntent: paymentIntent };
+        }
+        return { message: 'Payment Intent created successfully.', paymentIntent: paymentIntent };
     } catch (error) {
         // If there is an error during the creation, return an error message
         return { error: 'Failed to create Payment Intent.' + error };

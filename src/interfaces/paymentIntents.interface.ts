@@ -5,7 +5,7 @@ export interface PaymentIntentInput {
     amount: number;
     currency: string;
     payment_method_types?: Array<TemplateStringsArray>;
-    paymentMethod: PaymentMethod
+    paymentMethod?: PaymentMethod
 }
 export interface PaymentIntentIDInput {
     paymentIntentId: string;
@@ -42,3 +42,10 @@ export interface SetupPaymentIntent {
 export interface RetrievePaymentIntent {
     SetupInentId:string
 }
+
+export interface CreatePaymentIntentRequest {
+    currency: string;
+    paymentMethodType: string;
+    paymentMethodOptions?: object;
+    customerId?: string; // Optional, required for paymentMethodType 'customer_balance'
+  }
