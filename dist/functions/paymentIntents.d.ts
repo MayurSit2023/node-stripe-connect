@@ -6,3 +6,4 @@ export declare function capturePaymentIntent({ paymentIntentId }: PaymentIntentI
 export declare function cancelPaymentIntent({ paymentIntentId }: PaymentIntentIDInput): Promise<PaymentIntentResult | PaymentIntentError>;
 export declare function setupPaymentIntent({ usage, customerId }: SetupPaymentIntent): Promise<PaymentIntentResult | PaymentIntentError>;
 export declare function retrieveSetupPaymentIntent({ SetupInentId }: RetrievePaymentIntent): Promise<PaymentIntentResult | PaymentIntentError>;
+export declare function confirmSetupPaymentIntent({ SetupInentId }: RetrievePaymentIntent): Promise<PaymentIntentResult | PaymentIntentError>;

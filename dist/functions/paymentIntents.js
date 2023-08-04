@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.retrieveSetupPaymentIntent = exports.setupPaymentIntent = exports.cancelPaymentIntent = exports.capturePaymentIntent = exports.confirmPaymentIntent = exports.retrievePaymentIntent = exports.createPaymentIntent = void 0;
+exports.confirmSetupPaymentIntent = exports.retrieveSetupPaymentIntent = exports.setupPaymentIntent = exports.cancelPaymentIntent = exports.capturePaymentIntent = exports.confirmPaymentIntent = exports.retrievePaymentIntent = exports.createPaymentIntent = void 0;
 const stripeConfig_1 = require("../config/stripeConfig");
 // Function to create a new Payment Intent on Stripe
 function createPaymentIntent({ amount, currency, paymentMethod }) {
@@ -183,3 +183,24 @@ function retrieveSetupPaymentIntent({ SetupInentId }) {
     });
 }
 exports.retrieveSetupPaymentIntent = retrieveSetupPaymentIntent;
+// Function to confirm a Setup Payment Intent on Stripe
+function confirmSetupPaymentIntent({ SetupInentId }) {
+    return __awaiter(this, void 0, void 0, function* () {
+        // Validate input data
+        if (!SetupInentId) {
+            return { error: 'Please provide a valid Setup Payment Intent ID.' };
+        }
+        const stripeInstance = (0, stripeConfig_1.getStripeInstance)();
+        try {
+            // Confirm the Payment Intent using the provided Setup Payment Intent ID
+            const paymentIntent = yield stripeInstance.paymentIntents.confirm(SetupInentId);
+            // Return the Payment Intent information along with a success message
+            return { message: 'Setup Payment Intent confirmed successfully.', paymentIntent };
+        }
+        catch (error) {
+            // If there is an error during the confirmation, return an error message
+            return { error: 'Failed to confirm Setup Payment Intent: ' + error };
+        }
+    });
+}
+exports.confirmSetupPaymentIntent = confirmSetupPaymentIntent;

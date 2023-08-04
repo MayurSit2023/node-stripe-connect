@@ -171,3 +171,24 @@ export async function retrieveSetupPaymentIntent({ SetupInentId }: RetrievePayme
         return { error: 'Failed to retrieve Payment Intent: ' + error };
     }
 }
+
+// Function to confirm a Setup Payment Intent on Stripe
+export async function confirmSetupPaymentIntent({ SetupInentId }: RetrievePaymentIntent): Promise<PaymentIntentResult | PaymentIntentError> {
+    // Validate input data
+    if (!SetupInentId) {
+        return { error: 'Please provide a valid Setup Payment Intent ID.' };
+    }
+
+    const stripeInstance = getStripeInstance();
+
+    try {
+        // Confirm the Payment Intent using the provided Setup Payment Intent ID
+        const paymentIntent = await stripeInstance.paymentIntents.confirm(SetupInentId);
+
+        // Return the Payment Intent information along with a success message
+        return { message: 'Setup Payment Intent confirmed successfully.', paymentIntent };
+    } catch (error) {
+        // If there is an error during the confirmation, return an error message
+        return { error: 'Failed to confirm Setup Payment Intent: ' + error };
+    }
+}
