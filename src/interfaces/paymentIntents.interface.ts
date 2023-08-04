@@ -16,6 +16,7 @@ export interface PaymentIntentResult {
     message: string;
     clientSecret?: string | null;
     paymentIntent?: Stripe.PaymentIntent;
+    setupIntent?:Stripe.SetupIntent;
 }
 
 // Interface for Payment Intent Error
@@ -31,4 +32,13 @@ export interface PaymentMethod {
     bankName?: string; // Only applicable if type is 'bank_account'. The name of the bank.
     bankLast4?: string; // Only applicable if type is 'bank_account'. The last 4 digits of the bank account number.
     // Add more properties as needed for other payment methods.
+}
+
+export interface SetupPaymentIntent {
+    usage:string
+    customerId: string;
+}
+
+export interface RetrievePaymentIntent {
+    SetupInentId:string
 }
