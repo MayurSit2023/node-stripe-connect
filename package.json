@@ -1,6 +1,6 @@
 {
   "name": "node-stripe-test",
-  "version": "1.0.3",
+  "version": "1.1.1",
   "description": "A package for Stripe integration.",
   "main": "index.js",
   "scripts": {
