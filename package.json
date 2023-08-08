@@ -1,6 +1,6 @@
 {
-  "name": "node-stripe-test",
-  "version": "1.1.1",
+  "name": "node-stripe-connect",
+  "version": "1.1.2",
   "description": "A package for Stripe integration.",
   "main": "index.js",
   "scripts": {
@@ -9,11 +9,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/MayurSit2023/node-stripe-test.git"
+    "url": "https://github.com/MayurSit2023/node-stripe-connect.git"
   },
   "keywords": [
     "stripe",
-    "integration"
+    "integration",
+    "connect",
+    "node"
   ],
   "author": "Mayur Chaudhary",
   "license": "MIT",
@@ -28,9 +30,9 @@
   "engines": {
     "node": ">=12.0.0"
   },
-  "homepage": "https://github.com/MayurSit2023/node-stripe-test#readme",
+  "homepage": "https://github.com/MayurSit2023/node-stripe-connect#readme",
   "bugs": {
-    "url": "https://github.com/MayurSit2023/node-stripe-test/issues"
+    "url": "https://github.com/MayurSit2023/node-stripe-connect/issues"
   },
   "publishConfig": {
     "access": "public"
